@@ -122,7 +122,7 @@ class Shortener::ShortenedUrl < ActiveRecord::Base
 
     if Shortener.enable_meta && meta
       meta.each do |key, value|
-        scopes = scopes.where('meta @> hstore(:key, :value)', key: key, value: value)
+        scopes = scopes.where('meta @> hstore(:key, :value)', key: key, value: value.to_s)
       end
     end
 
