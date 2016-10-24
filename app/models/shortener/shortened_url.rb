@@ -41,7 +41,6 @@ class Shortener::ShortenedUrl < ActiveRecord::Base
                            meta:       meta)
                end
              else
-               scope = owner ? owner.shortened_urls : self
                creation_method = fresh ? 'create' : 'first_or_create'
 
                fields = {
@@ -51,7 +50,7 @@ class Shortener::ShortenedUrl < ActiveRecord::Base
                }
                fields.merge!({ meta: meta }) if Shortener.enable_meta
 
-               scopes = apply_scopes(scope, destination_url, meta: meta)
+               scopes = apply_scopes(owner, destination_url, meta: meta)
 
                scopes.send(creation_method, fields)
              end
@@ -117,7 +116,9 @@ class Shortener::ShortenedUrl < ActiveRecord::Base
 
   private
 
-  def self.apply_scopes(scope, destination_url, meta: nil)
+  def self.apply_scopes(owner, destination_url, meta: nil)
+    scope = owner ? owner.shortened_urls : self
+
     scopes = scope.where(url: clean_url(destination_url))
 
     if Shortener.enable_meta && meta

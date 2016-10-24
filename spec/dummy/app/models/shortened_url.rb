@@ -11,7 +11,9 @@ Shortener::ShortenedUrl.class_eval do
 
   class << self
 
-    def apply_scopes(scope, destination_url, meta: nil)
+    def apply_scopes(owner, destination_url, meta: nil)
+      scope = owner ? owner.shortened_urls : self
+
       scopes = scope.where(url: clean_url(destination_url))
 
       if Shortener.enable_meta && meta
