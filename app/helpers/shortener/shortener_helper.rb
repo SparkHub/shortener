@@ -11,7 +11,13 @@ module Shortener::ShortenerHelper
                                                  meta:       meta)
 
     if short_url
-      options = { controller: :"shortener/shortened_urls", action: :show, id: short_url.unique_key, only_path: false }.merge(url_options)
+      options = {
+        controller: '/shortener/shortened_urls',
+        action:     :show,
+        id:         short_url.unique_key,
+        only_path:  false
+      }.merge(url_options)
+
       url_for(options)
     else
       url
